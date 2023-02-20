@@ -3,7 +3,7 @@ import axios from 'axios';
 import {IGroupView} from "../models/IGroupView";
 
 export class ContactService {
-    private static serverUrl: string = `http://localhost:9000`;
+    private static serverUrl: string = "https://contact-manager-lf0r.onrender.com";
 
     /**
      @usage : to get all contacts
