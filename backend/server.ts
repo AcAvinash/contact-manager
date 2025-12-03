@@ -33,16 +33,19 @@ app.get("/", (request: Request, response: Response) => {
 app.use("/contacts", contactRouter);
 app.use("/groups", groupRouter);
 
-if (port) {
-    app.listen(Number(port), () => {
-        if (dbUrl && dbName) {
-            DBUtil.connectToDB(dbUrl, dbName).then((dbResponse) => {
-                console.log(dbResponse);
-            }).catch((error) => {
-                console.error(error);
-                process.exit(0); // Force stop express server
+if (dbUrl && dbName) {
+    DBUtil.connectToDB(dbUrl, dbName)
+        .then((msg) => {
+            console.log(msg); // MongoDB connected successfully
+            app.listen(Number(port), () => {
+                console.log(`Express Server is started at ${port}`);
             });
-        }
-        console.log(`Express Server is started at ${port}`);
-    });
+        })
+        .catch((err) => {
+            console.error(err); // MongoDB connection failed
+            process.exit(1);   // Server ko stop kar do
+        });
+} else {
+    console.error("DB URL or DB Name not defined in .env");
+    process.exit(1);
 }
